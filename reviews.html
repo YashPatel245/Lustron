@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lustron Reviews — Lustron Auto Detailing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #050505;
+      --white: #f5f2ee;
+      --grey: #8d8b88;
+      --card: #111111;
+      --accent: #0ea5e9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.8;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(14,165,233,0.18), transparent 24%),
+                  radial-gradient(circle at bottom right, rgba(14,165,233,0.12), transparent 18%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .page-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: rgba(245,242,238,0.75);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .header {
+      padding: 3.5rem 0 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      line-height: 0.9;
+      letter-spacing: 0.03em;
+      margin-bottom: 1rem;
+      color: var(--white);
+    }
+    .header p {
+      max-width: 760px;
+      color: rgba(245,242,238,0.72);
+      font-size: 1rem;
+    }
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+    .review-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .review-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(14,165,233,0.35);
+    }
+    .review-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .review-name {
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .review-stars {
+      color: #f5c518;
+      letter-spacing: 0.08em;
+      font-size: 0.95rem;
+    }
+    .review-text {
+      color: rgba(245,242,238,0.88);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+    .review-date {
+      color: var(--grey);
+      font-size: 0.82rem;
+      margin-top: 1.5rem;
+    }
+    .footer-note {
+      margin-top: 3rem;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 1rem;
+      color: rgba(245,242,238,0.75);
+      background: rgba(255,255,255,0.02);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 900px) {
+      .review-grid { grid-template-columns: 1fr; }
+      .header { padding-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+    <nav>
+      <a href="lustron-landing.html" class="logo">Lustron</a>
+      <div class="nav-links">
+        <a href="lustron-landing.html">Home</a>
+        <a href="lustron-services.html">Services</a>
+      </div>
+    </nav>
+
+    <header class="header">
+      <h1>Lustron Auto Detailing always surpasses people's expectations</h1>
+      <p>Read honest reviews from drivers in Windsor who chose Lustron for mobile and shop detailing. Every service is built around flawless results, friendly communication, and fast turnaround.</p>
+    </header>
+
+    <section class="review-grid">
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Joseph Alhoush</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Amazing job with the car! Very friendly person. Come check him out!!</div>
+        <div class="review-date">8 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Kamal Ghazzawi</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Fast, friendly, and professional service made my car look brand new again. Highly recommend!</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Micheal</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Got my car back and couldn't believe how clean it was. If you want your car looking brand new I definitely recommend.</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Yazan Abboud</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Amazing job all around, will definitely come back next time. Highly recommend!!!</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">George Ghusn</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Amazing service all around, highly recommend if you want your car to look new again!</div>
+        <div class="review-date">10 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">George Ford</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Amazing detailing my car looked brand new.</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Carlos Shmsdin</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">First experience and I received fast and quality service. 100% recommend and will be back soon.</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Farah Farah</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Great and friendly service, the staff practice outstanding professionalism and provide excellent experience, that welcomes the customers again.</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Senay Walelgne</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Incredible work, very clean, very fast, and top service. Try him out.</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Tia Durzi</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Really good service, very friendly and job done very well!!!</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Ahmad</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Good car cleaning with better customer service. 10/10 must try!</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Melina Salloum</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Greatest detailing I've ever went to. I went in with a black car, it came out white.</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Karam Salloum</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Great service, clean environment, recommend to all my friends!</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Anthony</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Best service my car looked brand new and good prices.</div>
+        <div class="review-date">1 year ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Vivien Vizzi</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Very good high quality detailing. Highly recommend!</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-meta">
+          <div class="review-name">Edwar Nasra</div>
+          <div class="review-stars">★★★★★</div>
+        </div>
+        <div class="review-text">Great and clean service.</div>
+        <div class="review-date">9 months ago</div>
+      </article>
+    </section>
+
+    <div class="footer-note">Want to add your review? Visit the Lustron services page to request a quote or book your next detailing appointment, then share your experience with us.</div>
+  </div>
+</body>
+</html>

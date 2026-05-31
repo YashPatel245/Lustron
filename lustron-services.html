@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — Lustron Detailing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --black-light: #121010;
+      --white: #f5f2ee;
+      --accent: #0ea5e9;
+      --accent-light: #60c0f2;
+      --accent-dim: #5aa3c9;
+      --mid: #0f1720;
+      --grey: #6b6560;
+      --glass-light: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(14,165,233,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.98), transparent);
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+    nav ul a {
+      text-decoration: none;
+      color: var(--white);
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      transition: opacity 0.3s, color 0.3s;
+    }
+    nav ul a:hover { opacity: 1; color: var(--accent); }
+
+    /* PAGE HEADER */
+    .page-header {
+      min-height: 30vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(14,165,233,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .page-subtitle {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(245,242,238,0.55);
+      max-width: 55ch;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* WIZARD CONTAINER */
+    .wizard-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* STEP INDICATOR */
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0.4;
+      transition: opacity 0.3s;
+    }
+
+    .step-item.active {
+      opacity: 1;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--glass-light);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--accent);
+      transition: all 0.3s;
+    }
+
+    .step-item.active .step-num {
+      background: var(--accent);
+      color: var(--black);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(14,165,233,0.4);
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,242,238,0.6);
+    }
+
+    .step-item.active .step-label {
+      color: var(--white);
+    }
+
+    /* SECTION */
+    .section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* VEHICLE SELECTION */
+    .vehicles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .vehicle-card {
+      position: relative;
+      padding: 2rem;
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      background: var(--glass-light);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .vehicle-card::before {
+      content: '';
+      position: absolute;
+      inset: -100%;
+      background: radial-gradient(circle, rgba(14,165,233,0.15), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .vehicle-card:hover {
+      border-color: rgba(14,165,233,0.4);
+      background: rgba(14,165,233,0.08);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(14,165,233,0.1);
+    }
+
+    .vehicle-card:hover::before {
+      opacity: 1;
+    }
+
+    .vehicle-card.selected {
+      border-color: var(--accent);
+      background: rgba(14,165,233,0.12);
+      box-shadow: 0 0 30px rgba(14,165,233,0.3), inset 0 0 30px rgba(14,165,233,0.05);
+    }
+
+    .vehicle-icon {
+      width: 120px;
+      height: 80px;
+      display: block;
+      margin: 0 auto 1rem auto;
+      position: relative;
+      z-index: 1;
+      object-fit: contain;
+      transition: transform 0.4s, filter 0.3s;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+    }
+
+    .vehicle-card:hover .vehicle-icon {
+      transform: scale(1.1);
+    }
+
+    .vehicle-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    /* SERVICE SELECTION */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .service-card {
+      position: relative;
+      padding: 2.5rem;
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      background: var(--glass-light);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: -100%;
+      background: radial-gradient(circle, rgba(200,169,110,0.15), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .service-card:hover {
+      border-color: rgba(14,165,233,0.4);
+      background: rgba(14,165,233,0.08);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(14,165,233,0.1);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .service-card.selected {
+      border-color: var(--accent);
+      background: rgba(14,165,233,0.12);
+      box-shadow: 0 0 30px rgba(14,165,233,0.3), inset 0 0 30px rgba(14,165,233,0.05);
+    }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* PACKAGE SELECTION */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .package-card {
+      position: relative;
+      padding: 2rem;
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      background: var(--glass-light);
+      backdrop-filter: blur(16px);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .package-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .package-card:hover {
+      border-color: rgba(14,165,233,0.4);
+      background: rgba(14,165,233,0.08);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(14,165,233,0.1);
+    }
+
+    .package-card:hover::before {
+      opacity: 1;
+    }
+
+    .package-card.selected {
+      border-color: var(--accent);
+      background: rgba(14,165,233,0.12);
+      box-shadow: 0 0 30px rgba(14,165,233,0.3), inset 0 0 30px rgba(14,165,233,0.05);
+    }
+
+    .package-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .package-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .package-features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .package-features li {
+      font-size: 0.85rem;
+      color: rgba(245,242,238,0.65);
+      line-height: 1.6;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .package-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* BUTTONS */
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-width: 160px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      box-shadow: 0 10px 30px rgba(14,165,233,0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(14,165,233,0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(14,165,233,0.1);
+      border-color: var(--accent-light);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--mid);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: rgba(245,242,238,0.5);
+      margin-top: 0.3rem;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      opacity: 1;
+    }
+
+    /* BOOKING SUMMARY */
+    .booking-summary {
+      background: rgba(14,165,233,0.08);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(245,242,238,0.4);
+      margin-bottom: 0.3rem;
+    }
+
+    .summary-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .summary-price {
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    /* FORM */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      color: rgba(245,242,238,0.7);
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--black);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(14,165,233,0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(245,242,238,0.3);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-error {
+      color: #ef4444;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    .time-selectors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* SUCCESS STATE */
+    .success-state {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .success-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .success-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+
+    .success-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(245,242,238,0.6);
+      margin-bottom: 1.5rem;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(245,242,238,0.35);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-top: 6rem;
+    }
+    footer .logo { font-size: 1.2rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .page-header { padding: 6rem 1.5rem 1.5rem; }
+      h1 { font-size: 2rem; }
+      .vehicles-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+      .vehicle-card { padding: 1.5rem; }
+      .vehicle-icon { font-size: 2.5rem; }
+      .vehicle-name { font-size: 1rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { padding: 2rem; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .modal { padding: 1.5rem; }
+      .booking-summary { grid-template-columns: 1fr; gap: 1rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .step-indicator { gap: 1rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .vehicle-icon { font-size: 2rem; }
+      .vehicle-name { font-size: 0.9rem; }
+      .step-num { width: 28px; height: 28px; font-size: 0.8rem; }
+      .modal { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="lustron-landing.html" class="logo">Lustron</a>
+    <ul>
+      <li><a href="lustron-landing.html">Home</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>Our Services</h1>
+      <p class="page-subtitle">Premium detailing packages tailored for every vehicle. Choose your car, select your service, and book your appointment.</p>
+    </div>
+  </div>
+
+  <!-- WIZARD CONTAINER -->
+  <div class="wizard-container">
+    <!-- STEP INDICATOR -->
+    <div class="step-indicator">
+      <div class="step-item active" data-step="1">
+        <div class="step-num">1</div>
+        <div class="step-label">Vehicle</div>
+      </div>
+      <div class="step-item" data-step="2">
+        <div class="step-num">2</div>
+        <div class="step-label">Service Type</div>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="step-num">3</div>
+        <div class="step-label">Package</div>
+      </div>
+      <div class="step-item" data-step="4">
+        <div class="step-num">4</div>
+        <div class="step-label">Booking</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: VEHICLE SELECTION -->
+    <div class="section active" id="step-1">
+      <div class="vehicles-grid">
+        <div class="vehicle-card" data-vehicle="coupe">
+          <img class="vehicle-icon" src="360_F_650577635_GesSMihkw3BjAVXDAKcLeaC8Ec8yUbTq.jpg" alt="Coupe">
+          <div class="vehicle-name">Coupe</div>
+        </div>
+        <div class="vehicle-card" data-vehicle="sedan">
+          <img class="vehicle-icon" src="suv-car-premium-in-blue-hue-isolated-on-a-white-background-with-3d-rendering_9765331 (1).jpg!bw700" alt="Sedan & SUV">
+          <div class="vehicle-name">Sedan & SUV</div>
+        </div>
+        <div class="vehicle-card" data-vehicle="largesuv">
+          <img class="vehicle-icon" src="huge-black-suv-offroad-3d-600nw-2264847463 (1).webp" alt="Large SUV">
+          <div class="vehicle-name">Large SUV</div>
+        </div>
+        <div class="vehicle-card" data-vehicle="truck">
+          <img class="vehicle-icon" src="images.jpg" alt="Pickup Truck">
+          <div class="vehicle-name">Pickup Truck</div>
+        </div>
+        <div class="vehicle-card" data-vehicle="minivan">
+          <img class="vehicle-icon" src="360_F_251115752_f0rLIcCILMOatbNi0m444VNdj6wuUofz (1).jpg" alt="Minivan">
+          <div class="vehicle-name">Minivan</div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" id="step1-next" disabled>Next: Select Service →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: SERVICE TYPE SELECTION -->
+    <div class="section" id="step-2">
+      <div class="services-grid">
+        <div class="service-card" data-service="interior">
+          <div class="service-icon">🧹</div>
+          <div class="service-title">Interior Detailing</div>
+        </div>
+        <div class="service-card" data-service="exterior">
+          <div class="service-icon">✨</div>
+          <div class="service-title">Exterior Detailing</div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="step2-back">← Back</button>
+        <button class="btn btn-primary" id="step2-next" disabled>Next: Choose Package →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PACKAGE SELECTION -->
+    <div class="section" id="step-3">
+      <div class="packages-grid" id="packages-container">
+        <!-- Populated by JS -->
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="step3-back">← Back</button>
+        <button class="btn btn-primary" id="step3-next" disabled>Next: Book Now →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: BOOKING FORM -->
+    <div class="section" id="step-4">
+      <button class="btn btn-secondary" id="step4-back" style="width: auto;">← Back</button>
+      <div class="btn-group" style="margin-top: 1rem;">
+        <!-- Populated by modal trigger -->
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING MODAL -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Book Your Appointment</div>
+          <div class="modal-subtitle">Complete your details to confirm</div>
+        </div>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+
+      <div class="booking-summary" id="modal-summary">
+        <!-- Populated by JS -->
+      </div>
+
+      <form id="booking-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="form-name" placeholder="John Smith" required />
+          <div class="form-error" id="error-name">Please enter your name</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" id="form-phone" placeholder="(780) 555-0000" required />
+          <div class="form-error" id="error-phone">Please enter a valid phone number</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Home Address</label>
+          <input type="text" class="form-input" id="form-address" placeholder="123 Main St, Windsor, AB" required />
+          <div class="form-error" id="error-address">Please enter your address</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-input" id="form-date" required />
+            <div class="form-error" id="error-date">Please select a date</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time</label>
+            <div class="time-selectors">
+              <select class="form-select" id="form-hour" required>
+                <option value="">Hour</option>
+              </select>
+              <select class="form-select" id="form-minute" required>
+                <option value="">Minute</option>
+              </select>
+            </div>
+            <div class="form-error" id="error-time">Please select a time</div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="form-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Booking →</button>
+        </div>
+      </form>
+
+      <div class="success-state" id="success-state" style="display: none;">
+        <div class="success-emoji">🎉</div>
+        <div class="success-title">Request Sent!</div>
+        <p class="success-text">Your booking request has been sent via email and SMS. We'll confirm your appointment shortly — stay close to your phone!</p>
+        <button class="btn btn-primary" id="success-close">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="lustron-landing.html" class="logo">Lustron</a>
+    <span>Windsor, Ontario &nbsp;·&nbsp; @lustrondetailing</span>
+    <span>© 2026 Lustron Detailing</span>
+  </footer>
+
+  <script>
+    // SERVICE DATA
+    const serviceData = {
+      coupe: {
+        interior: [
+          { name: 'Light Clean', price: 100, features: ['Full vacuum & wipe-down', 'Window cleaning', 'Door jamb wipe', 'Air freshener'] },
+          { name: 'Deep Clean', price: 110, features: ['Full vacuum & wipe-down', 'Carpet shampooing', 'Leather conditioning', 'Odor removal'] },
+          { name: 'Showroom Detail', price: 150, features: ['Deep cleaning', 'Leather treatment', 'Carpet protection', 'Premium air freshener'] },
+          { name: 'New Car Package', price: 160, features: ['Full interior detail', 'Paint protection film', 'Ceramic sealant', '6-month warranty'] }
+        ],
+        exterior: [
+          { name: 'Basic Wash', price: 40, features: ['Hand wash & rinse', 'Wheel cleaning', 'Tire dressing', 'Window exterior'] },
+          { name: 'Premium Wash', price: 50, features: ['Hand wash & rinse', 'Clay bar treatment', 'Hand wax application', 'Trim dressing'] },
+          { name: 'Paint Enhancement', price: 90, features: ['Multi-stage polish', 'Swirl mark removal', 'Ceramic coating prep', 'Final wax'] },
+          { name: 'Ultimate Detail', price: 100, features: ['Complete paint correction', 'Ceramic coating', 'Glass sealing', '12-month protection'] }
+        ]
+      },
+      sedan: {
+        interior: [
+          { name: 'Light Clean', price: 120, features: ['Full vacuum & wipe-down', 'Window cleaning', 'Door jamb wipe', 'Air freshener'] },
+          { name: 'Deep Clean', price: 145, features: ['Full vacuum & wipe-down', 'Carpet shampooing', 'Leather conditioning', 'Odor removal'] },
+          { name: 'Showroom Detail', price: 170, features: ['Deep cleaning', 'Leather treatment', 'Carpet protection', 'Premium air freshener'] },
+          { name: 'New Car Package', price: 180, features: ['Full interior detail', 'Paint protection film', 'Ceramic sealant', '6-month warranty'] }
+        ],
+        exterior: [
+          { name: 'Basic Wash', price: 20, features: ['Hand wash & rinse', 'Wheel cleaning', 'Tire dressing', 'Window exterior'] },
+          { name: 'Premium Wash', price: 70, features: ['Hand wash & rinse', 'Clay bar treatment', 'Hand wax application', 'Trim dressing'] },
+          { name: 'Paint Enhancement', price: 90, features: ['Multi-stage polish', 'Swirl mark removal', 'Ceramic coating prep', 'Final wax'] },
+          { name: 'Ultimate Detail', price: 120, features: ['Complete paint correction', 'Ceramic coating', 'Glass sealing', '12-month protection'] }
+        ]
+      },
+      largesuv: {
+        interior: [
+          { name: 'Light Clean', price: 150, features: ['Full vacuum & wipe-down', 'Window cleaning', 'Door jamb wipe', 'Air freshener'] },
+          { name: 'Deep Clean', price: 160, features: ['Full vacuum & wipe-down', 'Carpet shampooing', 'Leather conditioning', 'Odor removal'] },
+          { name: 'Showroom Detail', price: 210, features: ['Deep cleaning', 'Leather treatment', 'Carpet protection', 'Premium air freshener'] },
+          { name: 'New Car Package', price: 220, features: ['Full interior detail', 'Paint protection film', 'Ceramic sealant', '6-month warranty'] }
+        ],
+        exterior: [
+          { name: 'Basic Wash', price: 60, features: ['Hand wash & rinse', 'Wheel cleaning', 'Tire dressing', 'Window exterior'] },
+          { name: 'Premium Wash', price: 70, features: ['Hand wash & rinse', 'Clay bar treatment', 'Hand wax application', 'Trim dressing'] },
+          { name: 'Paint Enhancement', price: 110, features: ['Multi-stage polish', 'Swirl mark removal', 'Ceramic coating prep', 'Final wax'] },
+          { name: 'Ultimate Detail', price: 120, features: ['Complete paint correction', 'Ceramic coating', 'Glass sealing', '12-month protection'] }
+        ]
+      },
+      truck: {
+        interior: [
+          { name: 'Light Clean', price: 130, features: ['Full vacuum & wipe-down', 'Window cleaning', 'Door jamb wipe', 'Air freshener'] },
+          { name: 'Deep Clean', price: 140, features: ['Full vacuum & wipe-down', 'Carpet shampooing', 'Leather conditioning', 'Odor removal'] },
+          { name: 'Showroom Detail', price: 180, features: ['Deep cleaning', 'Leather treatment', 'Carpet protection', 'Premium air freshener'] },
+          { name: 'New Car Package', price: 190, features: ['Full interior detail', 'Paint protection film', 'Ceramic sealant', '6-month warranty'] }
+        ],
+        exterior: [
+          { name: 'Basic Wash', price: 50, features: ['Hand wash & rinse', 'Wheel cleaning', 'Tire dressing', 'Window exterior'] },
+          { name: 'Premium Wash', price: 60, features: ['Hand wash & rinse', 'Clay bar treatment', 'Hand wax application', 'Trim dressing'] },
+          { name: 'Paint Enhancement', price: 110, features: ['Multi-stage polish', 'Swirl mark removal', 'Ceramic coating prep', 'Final wax'] },
+          { name: 'Ultimate Detail', price: 120, features: ['Complete paint correction', 'Ceramic coating', 'Glass sealing', '12-month protection'] }
+        ]
+      },
+      minivan: {
+        interior: [
+          { name: 'Light Clean', price: 130, features: ['Full vacuum & wipe-down', 'Window cleaning', 'Door jamb wipe', 'Air freshener'] },
+          { name: 'Deep Clean', price: 160, features: ['Full vacuum & wipe-down', 'Carpet shampooing', 'Leather conditioning', 'Odor removal'] },
+          { name: 'Showroom Detail', price: 190, features: ['Deep cleaning', 'Leather treatment', 'Carpet protection', 'Premium air freshener'] },
+          { name: 'New Car Package', price: 220, features: ['Full interior detail', 'Paint protection film', 'Ceramic sealant', '6-month warranty'] }
+        ],
+        exterior: [
+          { name: 'Basic Wash', price: 30, features: ['Hand wash & rinse', 'Wheel cleaning', 'Tire dressing', 'Window exterior'] },
+          { name: 'Premium Wash', price: 70, features: ['Hand wash & rinse', 'Clay bar treatment', 'Hand wax application', 'Trim dressing'] },
+          { name: 'Paint Enhancement', price: 110, features: ['Multi-stage polish', 'Swirl mark removal', 'Ceramic coating prep', 'Final wax'] },
+          { name: 'Ultimate Detail', price: 150, features: ['Complete paint correction', 'Ceramic coating', 'Glass sealing', '12-month protection'] }
+        ]
+      }
+    };
+
+    // STATE
+    let state = {
+      vehicle: null,
+      service: null,
+      package: null,
+      currentStep: 1
+    };
+
+    // ELEMENT REFERENCES
+    const vehicleCards = document.querySelectorAll('.vehicle-card');
+    const serviceCards = document.querySelectorAll('.service-card');
+    const packageContainer = document.getElementById('packages-container');
+    const bookingModal = document.getElementById('booking-modal');
+    const bookingForm = document.getElementById('booking-form');
+    const modalSummary = document.getElementById('modal-summary');
+    const successState = document.getElementById('success-state');
+
+    // TIME SETUP
+    function setupTime() {
+      const hourSelect = document.getElementById('form-hour');
+      const minuteSelect = document.getElementById('form-minute');
+      // reset
+      hourSelect.innerHTML = '<option value="">Hour</option>';
+      minuteSelect.innerHTML = '<option value="">Minute</option>';
+
+      // Hours: 8 -> 19 (display as 8,9,10,11,12,1,2...7)
+        for (let h = 8; h <= 19; h++) {
+          const value = h; // keep 24h value for form
+          const displayHour = h <= 12 ? h : h - 12;
+          const ampm = h < 12 ? 'AM' : 'PM';
+          hourSelect.innerHTML += `<option value="${value}">${displayHour} ${ampm}</option>`;
+        }
+
+      // Minutes: every minute 00-59
+      for (let m = 0; m < 60; m++) {
+        const minute = m < 10 ? `0${m}` : `${m}`;
+        minuteSelect.innerHTML += `<option value="${minute}">${minute}</option>`;
+      }
+    }
+
+    // EVENT LISTENERS
+    vehicleCards.forEach(card => {
+      card.addEventListener('click', () => {
+        vehicleCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        state.vehicle = card.dataset.vehicle;
+        document.getElementById('step1-next').disabled = false;
+      });
+    });
+
+    serviceCards.forEach(card => {
+      card.addEventListener('click', () => {
+        serviceCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        state.service = card.dataset.service;
+        document.getElementById('step2-next').disabled = false;
+      });
+    });
+
+    document.getElementById('step1-next').addEventListener('click', () => goToStep(2));
+    document.getElementById('step2-back').addEventListener('click', () => goToStep(1));
+    document.getElementById('step2-next').addEventListener('click', () => {
+      renderPackages();
+      goToStep(3);
+    });
+    document.getElementById('step3-back').addEventListener('click', () => goToStep(2));
+    document.getElementById('step3-next').addEventListener('click', () => {
+      openBookingModal();
+      goToStep(4);
+    });
+    document.getElementById('step4-back').addEventListener('click', () => goToStep(3));
+
+    document.getElementById('modal-close').addEventListener('click', closeBookingModal);
+    document.getElementById('form-cancel').addEventListener('click', closeBookingModal);
+    document.getElementById('success-close').addEventListener('click', closeBookingModal);
+
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (validateForm()) {
+        submitBooking();
+      }
+    });
+
+    // FUNCTIONS
+    function goToStep(step) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active'));
+
+      document.getElementById(`step-${step}`).classList.add('active');
+      document.querySelector(`.step-item[data-step="${step}"]`).classList.add('active');
+      state.currentStep = step;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderPackages() {
+      const packages = serviceData[state.vehicle][state.service];
+      packageContainer.innerHTML = '';
+
+      packages.forEach((pkg, idx) => {
+        const card = document.createElement('div');
+        card.className = 'package-card';
+        card.dataset.package = idx;
+        card.innerHTML = `
+          <div class="package-name">${pkg.name}</div>
+          <div class="package-price">$${pkg.price}</div>
+          <ul class="package-features">
+            ${pkg.features.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+        `;
+        card.addEventListener('click', () => selectPackage(card, pkg, idx));
+        packageContainer.appendChild(card);
+      });
+    }
+
+    function selectPackage(card, pkg, idx) {
+      document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      state.package = { ...pkg, index: idx };
+      document.getElementById('step3-next').disabled = false;
+    }
+
+    function openBookingModal() {
+      const vehicleNames = { coupe: 'Coupe', sedan: 'Sedan & SUV', largesuv: 'Large SUV', truck: 'Pickup Truck', minivan: 'Minivan' };
+      const serviceNames = { interior: 'Interior Detailing', exterior: 'Exterior Detailing' };
+
+      modalSummary.innerHTML = `
+        <div class="summary-item">
+          <div class="summary-label">Vehicle</div>
+          <div class="summary-value">${vehicleNames[state.vehicle]}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Service</div>
+          <div class="summary-value">${serviceNames[state.service]}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Package</div>
+          <div class="summary-value">${state.package.name}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Price</div>
+          <div class="summary-value summary-price">$${state.package.price}</div>
+        </div>
+      `;
+
+      document.getElementById('form-date').min = new Date().toISOString().split('T')[0];
+      bookingForm.style.display = 'block';
+      successState.style.display = 'none';
+      bookingModal.classList.add('active');
+    }
+
+    function closeBookingModal() {
+      bookingModal.classList.remove('active');
+    }
+
+    function validateForm() {
+      const name = document.getElementById('form-name');
+      const phone = document.getElementById('form-phone');
+      const address = document.getElementById('form-address');
+      const date = document.getElementById('form-date');
+      const hour = document.getElementById('form-hour');
+      const minute = document.getElementById('form-minute');
+
+      let isValid = true;
+
+      if (!name.value.trim()) {
+        document.getElementById('error-name').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('error-name').classList.remove('show');
+      }
+
+      if (!phone.value.trim() || !/^\d{10}|^\+?1?\d{10}|^\(\d{3}\)\s?\d{3}-?\d{4}/.test(phone.value)) {
+        document.getElementById('error-phone').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('error-phone').classList.remove('show');
+      }
+
+      if (!address.value.trim()) {
+        document.getElementById('error-address').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('error-address').classList.remove('show');
+      }
+
+      if (!date.value) {
+        document.getElementById('error-date').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('error-date').classList.remove('show');
+      }
+
+      if (!hour.value || !minute.value) {
+        document.getElementById('error-time').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('error-time').classList.remove('show');
+      }
+
+      return isValid;
+    }
+
+    function submitBooking() {
+      const vehicleNames = { coupe: 'Coupe', sedan: 'Sedan & SUV', largesuv: 'Large SUV', truck: 'Pickup Truck', minivan: 'Minivan' };
+      const serviceNames = { interior: 'Interior Detailing', exterior: 'Exterior Detailing' };
+
+      const name = document.getElementById('form-name').value;
+      const phone = document.getElementById('form-phone').value;
+      const address = document.getElementById('form-address').value;
+      const date = document.getElementById('form-date').value;
+      const time = `${document.getElementById('form-hour').value.split(':')[0]}:${document.getElementById('form-minute').value}`;
+
+      const bookingData = {
+        name,
+        phone,
+        address,
+        vehicle: vehicleNames[state.vehicle],
+        service: serviceNames[state.service],
+        package: state.package.name,
+        price: state.package.price,
+        date,
+        time
+      };
+
+      // SEND EMAIL
+      const emailBody = `New Booking Request — Lustron Detailing
+
+Customer Name: ${bookingData.name}
+Phone Number: ${bookingData.phone}
+Address: ${bookingData.address}
+
+Vehicle Type: ${bookingData.vehicle}
+Service Type: ${bookingData.service}
+Package: ${bookingData.package}
+Price: $${bookingData.price}
+
+Date: ${bookingData.date}
+Time: ${bookingData.time}`;
+
+      const subject = encodeURIComponent(`New Booking – ${bookingData.package} (${bookingData.vehicle})`);
+      window.open(`mailto:lustrondetailing@gmail.com?subject=${subject}&body=${encodeURIComponent(emailBody)}`, '_blank');
+
+      // OPEN SMS APP
+      setTimeout(() => {
+        const smsBody = `Lustron Booking:\n${bookingData.name} | ${bookingData.phone}\n${bookingData.address}\n${bookingData.date} @ ${bookingData.time}\n${bookingData.vehicle} – ${bookingData.package} ($${bookingData.price})`;
+        window.open(`sms:+17806050853?body=${encodeURIComponent(smsBody)}`, '_blank');
+
+        // SHOW SUCCESS STATE
+        setTimeout(() => {
+          bookingForm.style.display = 'none';
+          successState.style.display = 'block';
+        }, 500);
+      }, 300);
+    }
+
+    // INITIALIZE
+    setupTime();
+  </script>
+
+</body>
+</html>
